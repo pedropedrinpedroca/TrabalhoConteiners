@@ -1,8 +1,8 @@
 # Trabalho prático sobre contêineres
 
-## Vídeo publicado no Youtube:
+## Vídeo publicado no YouTube:
 ```text
-
+https://youtu.be/HMs6Unp0uFY
 ```
 
 Ambiente desenvolvido com Docker Compose contendo:
