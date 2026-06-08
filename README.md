@@ -1,5 +1,10 @@
 # Trabalho prático sobre contêineres
 
+## Vídeo publicado no Youtube:
+```text
+
+```
+
 Ambiente desenvolvido com Docker Compose contendo:
 - Aplicação web em PHP + Apache disponível em `http://localhost:8080`.
 - Banco de dados MySQL em outro contêiner, sem porta publicada para acesso externo.
