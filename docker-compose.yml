@@ -1,0 +1,70 @@
+services:
+  web:
+    build: ./web
+    container_name: trabalho_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: trabalho_db
+      DB_USER: app_user
+      DB_PASSWORD: app_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  db:
+    image: mysql:8.0
+    container_name: trabalho_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: trabalho_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    expose:
+      - "3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  adminer:
+    image: adminer:latest
+    container_name: trabalho_adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  portainer:
+    image: portainer/portainer-ce:sts
+    container_name: trabalho_portainer
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+  portainer_data:
+
+networks:
+  app_network:
+    driver: bridge
